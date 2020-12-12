@@ -1,31 +1,37 @@
-import rpg.personnages.spark
-import rpg.personnages.ennemy
+import personnages.spark
+import personnages.ennemy
+import actions_combat
 
 combat_cours = True
+nb_tours = 1
 
 # Module de test pour arrêter le combat
 # def test_mort():
 #     for i in [0]:
-#         if (rpg.personnages.spark.pv) < 1:
-#             print("Terminé ! \n", rpg.personnages.ennemy.nom, "gagne le match")
+#         if (personnages.spark.pv) < 1:
+#             print("Terminé ! \n", personnages.ennemy.nom, "gagne le match")
 #             break
-#         if (rpg.personnages.ennemy.pv) < 1:
-#             print("Terminé ! \n", rpg.personnages.spark.nom, "gagne le match")
+#         if (personnages.ennemy.pv) < 1:
+#             print("Terminé ! \n", personnages.spark.nom, "gagne le match")
 #             break
 
 while combat_cours:
     
     # Tour du J1
     # On teste si un personnage est mort
-    if (rpg.personnages.spark.pv) < 1:
-        print("Terminé ! \n", rpg.personnages.ennemy.nom, "gagne le match")
+    if (personnages.spark.pv) < 1:
+        print("Terminé ! \n{} gagne le match en {} tour(s)".format(personnages.ennemy.nom, nb_tours))
         break
-    if (rpg.personnages.ennemy.pv) < 1:
-        print("Terminé ! \n", rpg.personnages.spark.nom, "gagne le match")
+    if (personnages.ennemy.pv) < 1:
+        print("Terminé ! \n{} gagne le match en {} tour(s)".format(personnages.spark.nom, nb_tours))
         break
+
+    personnages.spark.defense_temporaire = personnages.spark.defense
+    # Réinitialise la défense du personnage en cas d'action défendre
+
     print("Tour du J1\n")
-    print("Joueur 1 : ", rpg.personnages.spark.nom, "(", rpg.personnages.spark.pv, "pv)")
-    print("Joueur 2 : ", rpg.personnages.ennemy.nom, "(", rpg.personnages.ennemy.pv, "pv)")
+    print("Joueur 1 : {} ({} pv)".format(personnages.spark.nom, personnages.spark.pv))
+    print("Joueur 2 : {} ({} pv)".format(personnages.ennemy.nom, personnages.ennemy.pv))
     print("Actions : (A)ttaquer, (D)éfendre, (C)ompétences, (O)bjets, (S)tatut")
     choix_utilisateur = str(input("Choix ? (Lettre entre parenthèse) "))
     
@@ -39,12 +45,10 @@ while combat_cours:
         # continue
     # Là on compare les valeurs d'attaque et de défense des fiches et on fait une soustraction pour 
     # voir de combien sont les dégâts infligés
-        degats = rpg.personnages.spark.attaque - rpg.personnages.ennemy.defense
-        rpg.personnages.ennemy.pv = rpg.personnages.ennemy.pv - degats
-        print(rpg.personnages.spark.nom, "inflige", degats, "dégats à", rpg.personnages.ennemy.nom)
-        choix_utilisateur = "R"
-
-    # if choix_utilisateur.lower() == "d":
+        actions_combat.attaque()
+        
+    if choix_utilisateur.lower() == "d":
+        actions_combat.defense()
         # On augmente la défense du joueur de 75%
         # def1*1.75
         # choix_utilisateur = "R"
@@ -65,15 +69,19 @@ while combat_cours:
 
     # Tour du J2
     # On teste si un personnage est mort
-    if (rpg.personnages.spark.pv) < 1:
-        print("Terminé ! \n", rpg.personnages.ennemy.nom, "gagne le match")
+    if (personnages.spark.pv) < 1:
+        print("Terminé ! \n{} gagne le match en {} tour(s)".format(personnages.ennemy.nom, nb_tours))
         break
-    if (rpg.personnages.ennemy.pv) < 1:
-        print("Terminé ! \n", rpg.personnages.spark.nom, "gagne le match")
+    if (personnages.ennemy.pv) < 1:
+        print("Terminé ! \n{} gagne le match en {} tour(s)".format(personnages.spark.nom, nb_tours))
         break
+
+    personnages.ennemy.defense_temporaire = personnages.ennemy.defense
+    # Réinitialise la défense du personnage en cas d'action défendre
+
     print("Tour du J2\n")    
-    print("Joueur 2 : ", rpg.personnages.ennemy.nom, "(",rpg.personnages.ennemy.pv, "pv)") 
-    print("Joueur 1 : ", rpg.personnages.spark.nom, "(",rpg.personnages.spark.pv, "pv)")
+    print("Joueur 2 : {} ({} pv)".format(personnages.ennemy.nom, personnages.ennemy.pv))
+    print("Joueur 1 : {} ({} pv)".format(personnages.spark.nom, personnages.spark.pv))
     print("Actions : (A)ttaquer, (D)éfendre, (C)ompétences, (O)bjets, (S)tatut")
     choix_utilisateur = str(input("Choix ? (Lettre entre parenthèse) "))
     
@@ -87,7 +95,9 @@ while combat_cours:
         # continue
     # Là on compare les valeurs d'attaque et de défense des fiches et on fait une soustraction pour 
     # voir de combien sont les dégâts infligés
-        degats = rpg.personnages.ennemy.attaque - rpg.personnages.spark.defense
-        rpg.personnages.spark.pv = rpg.personnages.spark.pv - degats
-        print(rpg.personnages.ennemy.nom, "inflige", degats, "dégats à", rpg.personnages.spark.nom)
-        choix_utilisateur = "R"
+        actions_combat.attaque2()
+
+    if choix_utilisateur.lower() == "d":
+        actions_combat.defense2()
+
+    nb_tours += 1
